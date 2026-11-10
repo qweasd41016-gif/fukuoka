@@ -1,0 +1,445 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>福岡慢活手冊</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* Layout concept: 手冊式長頁。封面摘要 → 全程地圖 → 每日（動線地圖＋含交通的時間軸）→ 費用 → 提醒。
+   色彩取自博多灣海水（青綠）、JR 藍、地下鐵橘，中性色偏青灰。 */
+:root{
+  --bg:#eaf1f0; --surface:#ffffff; --surface2:#f4f8f7; --ink:#12262f; --muted:#556a71; --line:#d0dcdb;
+  --accent:#0b6e7a; --accent-ink:#ffffff; --rail:#2250a8; --subway:#cf5a12; --walk:#6a7f86;
+  --warn-bg:#fff3d6; --warn-ink:#6b4a00; --warn-line:#e7c36a;
+  --serif:'Noto Serif TC','Songti TC','PMingLiU',serif; --sans:'Noto Sans TC','PingFang TC','Microsoft JhengHei',system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0e1a1f; --surface:#162830; --surface2:#1b3139; --ink:#e5f0f1; --muted:#9bb2b8; --line:#2b434b;
+  --accent:#5cc4cf; --accent-ink:#06242a; --rail:#86aaff; --subway:#ff9b5e; --walk:#93a8ae;
+  --warn-bg:#3a2f12; --warn-ink:#f3d58a; --warn-line:#6f5a22; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e1a1f; --surface:#162830; --surface2:#1b3139; --ink:#e5f0f1; --muted:#9bb2b8; --line:#2b434b;
+  --accent:#5cc4cf; --accent-ink:#06242a; --rail:#86aaff; --subway:#ff9b5e; --walk:#93a8ae;
+  --warn-bg:#3a2f12; --warn-ink:#f3d58a; --warn-line:#6f5a22; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.65;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 56px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+.wrap{max-width:1000px;margin:0 auto}
+a{color:var(--accent)}
+a:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:4px}
+h1,h2,h3{font-family:var(--serif);text-wrap:balance;margin:0;line-height:1.3}
+.num{font-variant-numeric:tabular-nums}
+
+/* cover */
+.cover{padding:40px 0 20px;display:grid;gap:18px}
+.eyebrow{font-size:12px;letter-spacing:.14em;color:var(--accent);font-weight:700}
+.cover h1{font-size:clamp(32px,6vw,52px);font-weight:700;letter-spacing:.02em}
+.cover .sub{color:var(--muted);max-width:60ch;margin:0}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.facts div{background:var(--surface);padding:12px 16px;min-width:0}
+.facts dt{font-size:12px;color:var(--muted);letter-spacing:.06em}
+.facts dd{margin:2px 0 0;font-weight:700}
+
+/* nav */
+.dnav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line);margin:0 calc(-1 * max(16px,env(safe-area-inset-left,0px)));padding:8px max(16px,env(safe-area-inset-right,0px)) 8px max(16px,env(safe-area-inset-left,0px))}
+.dnav ul{list-style:none;display:flex;gap:6px;margin:0 auto;padding:0;max-width:1000px;overflow-x:auto}
+.dnav a{display:block;white-space:nowrap;text-decoration:none;color:var(--ink);padding:5px 12px;border:1px solid var(--line);border-radius:999px;background:var(--surface);font-size:13px;font-weight:500}
+.dnav a:hover{border-color:var(--accent);color:var(--accent)}
+
+section{padding-top:36px;scroll-margin-top:56px}
+.sec-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;margin-bottom:14px}
+.sec-h h2{font-size:clamp(22px,3.6vw,30px)}
+.sec-h .d{font-weight:700;color:var(--accent);font-size:13px;letter-spacing:.1em}
+.sec-h .cost{margin-left:auto;font-size:13px;color:var(--muted)}
+.sec-h .cost b{color:var(--ink)}
+
+/* day index */
+.dayidx{list-style:none;margin:16px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px}
+.dayidx a{display:grid;grid-template-columns:auto 1fr auto;gap:2px 12px;align-items:baseline;text-decoration:none;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 14px}
+.dayidx a:hover{border-color:var(--accent)}
+.dayidx .k{font-weight:700;color:var(--accent);font-size:13px}
+.dayidx .t{font-size:14px;min-width:0}
+.dayidx .c{font-size:13px;color:var(--muted)}
+
+/* maps */
+.maps{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:14px;margin-bottom:18px}
+.mapcard{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 12px 10px;min-width:0}
+.mapcard h3{font-size:15px;margin-bottom:8px;font-family:var(--sans);font-weight:700}
+.mapbox{width:100%;min-width:0}
+.mapbox svg{display:block;width:100%;height:auto;background:var(--surface2);border-radius:8px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12px;color:var(--muted);margin-top:8px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{display:inline-block;width:26px;height:0;border-top:3px solid}
+.legend .l-walk{border-top-style:dotted;border-color:var(--walk)}
+.legend .l-subway{border-color:var(--subway)}
+.legend .l-train{border-color:var(--rail);border-top-width:5px}
+.cap{font-size:12px;color:var(--muted);margin:6px 0 0}
+.m-walk{stroke:var(--walk);stroke-width:3;stroke-dasharray:1 7;stroke-linecap:round;fill:none}
+.m-subway{stroke:var(--subway);stroke-width:4;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.m-train{stroke:var(--rail);stroke-width:6;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.m-train-tick{stroke:var(--surface2);stroke-width:2;stroke-dasharray:5 9;fill:none}
+.pin rect,.pin circle{fill:var(--accent);stroke:var(--surface2);stroke-width:2}
+.pin text{fill:var(--accent-ink);font-size:12px;font-weight:700;text-anchor:middle;font-family:var(--sans)}
+.viadot{fill:var(--muted);stroke:var(--surface2);stroke-width:1.5}
+.lbl{fill:var(--ink);font-size:13px;font-weight:700;font-family:var(--sans);paint-order:stroke;stroke:var(--surface2);stroke-width:4px;stroke-linejoin:round}
+.lbl.v{font-size:11px;font-weight:500;fill:var(--muted)}
+.lbl.m{font-size:12px;font-weight:700}
+.lbl.m-train{fill:var(--rail);stroke:var(--surface2);stroke-width:4px;fill:var(--rail)}
+.lbl.m-subway{fill:var(--subway);stroke:var(--surface2);stroke-width:4px;stroke-dasharray:none}
+.lbl.m-walk{fill:var(--muted);stroke:var(--surface2);stroke-width:4px;stroke-dasharray:none}
+
+/* timeline */
+.tl{list-style:none;margin:0;padding:0}
+.stop{display:grid;grid-template-columns:38px minmax(0,1fr);gap:0 12px}
+.stop .rail{position:relative;display:flex;justify-content:center}
+.stop .rail::after{content:"";position:absolute;top:34px;bottom:-6px;width:2px;background:var(--line)}
+.stop:last-child .rail::after{display:none}
+.badge{position:relative;z-index:1;margin-top:2px;min-width:30px;height:30px;padding:0 6px;border-radius:15px;background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;font-variant-numeric:tabular-nums;align-self:start;height:30px}
+.stop .body{padding-bottom:14px;min-width:0}
+.leg{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:4px 12px;align-items:start;margin:0 0 8px;padding:8px 12px;border-radius:8px;background:var(--surface2);border:1px solid var(--line);border-left-width:4px}
+.leg.walk{border-left-color:var(--walk);border-left-style:dotted}
+.leg.subway{border-left-color:var(--subway)}
+.leg.train{border-left-color:var(--rail)}
+.mode{font-size:12px;font-weight:700;padding:1px 8px;border-radius:999px;border:1px solid currentColor;white-space:nowrap}
+.leg.walk .mode{color:var(--muted)} .leg.subway .mode{color:var(--subway)} .leg.train .mode{color:var(--rail)}
+.legtxt{font-size:13.5px;min-width:0}
+.legtxt b{font-weight:700}
+.legtxt .meta{color:var(--muted)}
+.gm{font-size:12.5px;white-space:nowrap;font-weight:500}
+.tip{grid-column:1/-1;font-size:12.5px;color:var(--muted);margin:0}
+.warn{grid-column:1/-1;font-size:12.5px;margin:2px 0 0;padding:6px 10px;border-radius:6px;background:var(--warn-bg);color:var(--warn-ink);border:1px solid var(--warn-line)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.card.opt{background:var(--surface2)}
+.card .t{font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums;letter-spacing:.03em}
+.card h3{font-family:var(--sans);font-size:16.5px;font-weight:700;margin:1px 0 4px}
+.card p{margin:0;color:var(--ink);font-size:14px}
+.card .row{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;margin-top:8px;font-size:13px}
+.chip{background:var(--surface2);border:1px solid var(--line);border-radius:999px;padding:1px 10px;font-variant-numeric:tabular-nums}
+.btn{display:inline-block;text-decoration:none;font-weight:500;font-size:13px;border:1px solid var(--accent);border-radius:6px;padding:4px 12px;color:var(--accent);background:transparent}
+.btn:hover{background:var(--accent);color:var(--accent-ink)}
+.dayact{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
+
+/* tables, notes */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:480px;font-variant-numeric:tabular-nums}
+th,td{padding:9px 14px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+th:first-child,td:first-child{text-align:left;white-space:normal}
+thead th{font-size:12.5px;color:var(--muted);font-weight:500;background:var(--surface2)}
+tfoot td{font-weight:700;border-bottom:0;background:var(--surface2)}
+.notes{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+.notes li{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 16px}
+.notes b{display:block;font-family:var(--serif)}
+.check{background:var(--warn-bg);border:1px solid var(--warn-line);color:var(--warn-ink);border-radius:10px;padding:14px 18px;margin-top:14px}
+.check h3{font-size:16px;margin-bottom:6px}
+.check ul{margin:0;padding-left:1.2em}
+.check li{margin:4px 0}
+.check a{color:inherit}
+footer{margin-top:40px;font-size:12.5px;color:var(--muted)}
+
+@media (max-width:560px){
+  .leg{grid-template-columns:auto minmax(0,1fr)}
+  .leg .gm{grid-column:1/-1}
+  .stop{grid-template-columns:34px minmax(0,1fr);gap:0 8px}
+}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+html{scroll-behavior:smooth}
+</style>
+
+<div class="wrap">
+  <header class="cover">
+    <div class="eyebrow">旅遊手冊 ・ 2025/02/10 – 02/15</div>
+    <h1>福岡慢活 6 天 5 夜</h1>
+    <p class="sub">慢遊由布院溫泉、海之中道與門司港懷舊街區。每一段移動都附上交通方式、時間、費用與 Google 地圖路線連結。</p>
+    <dl class="facts" id="facts"></dl>
+  </header>
+
+  <nav class="dnav" aria-label="章節"><ul id="nav"></ul></nav>
+
+  <section id="overview">
+    <div class="sec-h"><h2>全程總覽</h2></div>
+    <div class="maps"><div class="mapcard"><h3>四個據點與主要移動</h3><div class="mapbox" id="map-overview"></div>
+      <div class="legend"><span><i class="l-train"></i>JR</span><span><i class="l-subway"></i>地鐵</span><span><i class="l-walk"></i>步行</span></div>
+      <p class="cap">示意圖，地點位置為概略。實際路線請點各段的「Google 地圖路線」。</p></div>
+    <div class="mapcard"><h3>每日一覽</h3><ol class="dayidx" id="dayidx" style="grid-template-columns:1fr"></ol></div></div>
+  </section>
+
+  <div id="days"></div>
+
+  <section id="budget">
+    <div class="sec-h"><h2>費用彙整</h2><span class="cost">單位：日圓（JPY），每人預估</span></div>
+    <div class="tbl"><table><thead><tr><th>日程</th><th>交通</th><th>餐飲・門票・其他</th><th>小計</th></tr></thead><tbody id="budget-body"></tbody><tfoot id="budget-foot"></tfoot></table></div>
+    <p class="cap">「交通」為各段 JR、地鐵的票價，其餘依行程表項目歸入第三欄。不含博多王子飯店住宿與個人購物；由布院花の庄已含一泊二食。</p>
+  </section>
+
+  <section id="notes">
+    <div class="sec-h"><h2>行前重點提醒</h2></div>
+    <ul class="notes">
+      <li><b>交通預約</b>JR「由布院之森」為全車指定席，需於乘車日前 30 天上午 10:00（日本時間）上 JR 九州官網準時搶票。</li>
+      <li><b>行李策略</b>Day 2 前往由布院時，大件行李免費寄放於博多王子飯店櫃檯，僅攜帶一日輕便過夜包；Day 3 返程再辦理 Check-in，連住 3 晚。</li>
+      <li><b>購物退稅</b>天神商圈（岩田屋、PARCO）及博多站 AMU PLAZA 皆可辦理免稅，建議隨身攜帶護照正本。</li>
+      <li><b>預算說明</b>表列費用為日圓預估的交通、餐食與票券支出；實際購物與博多王子飯店住宿費另計。</li>
+    </ul>
+    <div class="check" id="check">
+      <h3>出發前請再確認</h3>
+      <ul>
+        <li>行程日期為 2025/02/10–02/15，已經過去。若要重新出發，請更新日期並重新確認班次與票價。</li>
+        <li>由布院之森票價：行程表為 ¥4,580。Ekitan 查到博多～由布院為 ¥6,130（乘車券 ¥3,300 ＋指定席特急券 ¥2,830），網路限定票 ¥5,600，費用依乘車日季節而異。</li>
+        <li>由布院之森時刻：9:17 博多發、11:31 抵達由布院與目前時刻表相符。回程行程表為 12:39 由布院發；Ekitan 2026/3/14 改正版列的由布院發車為 12:01、15:56、17:17，請以 JR 九州官網為準。</li>
+        <li>各景點位置為概略座標，餐廳與旅館請以 Google 地圖搜尋結果核對。來源：<a href="https://ekitan.com/zh-tw/article/yufuinnomori-jikoku-ryoukin" target="_blank" rel="noopener">Ekitan 由布院之森時刻表與票價</a>、<a href="https://travelist.jp/airport_FUK/guide/posts/p309" target="_blank" rel="noopener">Travelist 福岡機場交通</a>。</li>
+      </ul>
+    </div>
+  </section>
+  <footer>行程內容依使用者提供的行程表整理。</footer>
+</div>
+
+<script>
+/* 地點：[全名, 緯度, 經度, Google 地圖搜尋字串, 地圖短名]（座標為概略） */
+const P={
+ fuk:['福岡機場（國際線）',33.5859,130.4507,'福岡空港 国際線ターミナル','福岡機場'],
+ prince:['博多王子飯店',33.5883,130.4180,'Hakata Prince Hotel','王子飯店'],
+ hakata:['JR 博多站',33.5897,130.4207,'博多駅','博多站'],
+ ichiran:['一蘭拉麵 總本店',33.5925,130.4083,'一蘭 本社総本店','一蘭總本店'],
+ kushida:['櫛田神社',33.5933,130.4107,'櫛田神社','櫛田神社'],
+ nakasu:['中洲川端・川畔',33.5920,130.4066,'中洲川端駅','中洲川畔'],
+ hanamidori:['華味鳥 水炊鍋',33.5906,130.4036,'華味鳥 水炊き 博多','華味鳥'],
+ tosu:['鳥栖',33.3790,130.5060,'鳥栖駅','鳥栖'],
+ kurume:['久留米',33.3170,130.5070,'久留米駅','久留米'],
+ hita:['日田',33.3220,130.9410,'日田駅','日田'],
+ yufuin_st:['JR 由布院站',33.2650,131.3567,'由布院駅','由布院站'],
+ hananosho:['由布院 花の庄',33.2632,131.3590,'由布院 花の庄','花の庄'],
+ yunotsubo:['湯之坪街道・由布まぶし 心',33.2660,131.3665,'由布まぶし 心','湯之坪街道'],
+ shin:['由布まぶし 心 站前店',33.2655,131.3560,'由布まぶし 心 由布院駅前店','由布まぶし 心'],
+ kinrinko:['金鱗湖',33.2655,131.3778,'金鱗湖','金鱗湖'],
+ laruche:['湖畔 Café La Ruche',33.2648,131.3766,'Cafe La Ruche 由布院','La Ruche'],
+ tenjin:['天神（PARCO・大名）',33.5912,130.3992,'天神 PARCO','天神'],
+ yatai:['中洲屋台街',33.5902,130.4062,'中洲屋台','中洲屋台'],
+ kashii:['香椎',33.6580,130.4418,'香椎駅','香椎'],
+ umi_st:['海之中道站',33.6594,130.3585,'海ノ中道駅','海之中道站'],
+ marine:['海洋世界海之中道',33.6612,130.3560,'マリンワールド海の中道','海洋世界'],
+ park:['海之中道海濱公園',33.6640,130.3610,'国営海の中道海浜公園','海濱公園'],
+ kokura:['小倉',33.8864,130.8826,'小倉駅','小倉'],
+ mojiko_st:['JR 門司港站',33.9455,130.9618,'門司港駅','門司港站'],
+ curry:['伽哩本舖 門司港 RETORO 店',33.9448,130.9626,'伽哩本舗 門司港レトロ店','伽哩本舖'],
+ mitsui:['舊門司三井俱樂部',33.9453,130.9640,'旧門司三井倶楽部','三井俱樂部'],
+ bluewing:['藍翼 Moji 吊橋',33.9467,130.9646,'ブルーウィングもじ','藍翼吊橋']
+};
+const MODE={walk:'步行',subway:'地鐵',train:'JR'};
+
+const DAYS=[
+{n:1,date:'2/10',wd:'週一',title:'抵達福岡・博多運河城・中洲屋台美食',stops:[
+ {p:'fuk',t:'10:00',title:'福岡機場降落入境',note:'10:00 降落入境，直接前往博多王子飯店寄放行李。'},
+ {p:'prince',t:'10:00 – 11:30',title:'博多王子飯店（寄放行李）',leg:{mode:'subway',how:'地鐵空港線（福岡空港 ➔ 博多站）＋步行',dur:'地鐵 6 分＋步行 5 分',ml:'地鐵 6分',fare:260,tip:'國際線航廈需先搭免費接駁巴士（約 10 分）到國內線航廈再轉乘地鐵，全程約 20–25 分。'}},
+ {p:'ichiran',t:'12:00 – 13:30',title:'午餐：一蘭拉麵 總本店',leg:{mode:'subway',how:'地鐵空港線至中洲川端，或散步前往',dur:'地鐵 2 分／步行 15 分',ml:'地鐵 2分'},cost:1000,note:'朝聖【一蘭拉麵 總本店】，享用經典豚骨拉麵。'},
+ {p:'kushida',t:'14:00 – 16:30',title:'櫛田神社',leg:{mode:'walk',how:'步行',dur:'步行 5 分鐘',ml:'步行 5分'},cost:210,note:'參觀櫛田神社（行程中唯一神社踩點），隨後漫步中洲川端商店街與博多運河城。'},
+ {p:'nakasu',t:'17:00 – 18:00',title:'中洲川端・川畔散步',leg:{mode:'walk',how:'步行',dur:'步行',ml:'步行'},cost:600,note:'輕甜點／咖啡時段：川畔散步，或享用簡單抹茶、咖啡小點。輕食不吃飽，留肚子給晚餐。'},
+ {p:'hanamidori',t:'19:30 – 21:00',title:'晚餐：水炊鍋（華味鳥）',leg:{mode:'walk',how:'步行',dur:'步行 5–10 分鐘',ml:'步行 5–10分'},cost:4000,note:'重頭戲晚餐，享用暖心濃郁的博多名物「水炊鍋」。'}
+ ],maps:[{title:'福岡市區動線',s:[1,2,3,4,5,6]}]},
+
+{n:2,date:'2/11',wd:'週二',title:'觀光特急「由布院之森」・湯之坪街道・宿花の庄溫泉',stops:[
+ {p:'prince',t:'08:30',title:'博多王子飯店出發',note:'大行李寄放於博多王子飯店，輕裝帶過夜包前往。'},
+ {p:'hakata',t:'08:30 – 09:15',title:'JR 博多站',leg:{mode:'walk',how:'步行',dur:'步行 5 分鐘',ml:'步行 5分'},note:'09:17 搭乘由布院之森 1 號。'},
+ {p:'yufuin_st',t:'09:17 – 11:31',title:'JR 由布院站',leg:{mode:'train',how:'JR 觀光特急「由布院之森 1 號」',dur:'約 2 小時 14 分',ml:'JR 2h14',fare:4580,via:['tosu','kurume','hita'],warn:'行程表票價為 ¥4,580；Ekitan 查到博多～由布院約 ¥6,130，網路限定票 ¥5,600。請出發前再確認。'},note:'全車指定席（出發前 30 天預約），車上欣賞沿途山景與鄉村風光。'},
+ {p:'hananosho',t:'11:35 – 12:00',title:'由布院 花の庄（寄放過夜包）',leg:{mode:'walk',how:'步行',dur:'步行約 5 分鐘',ml:'步行 5分'},note:'站旁 5 分鐘即達，先寄放過夜包。'},
+ {p:'shin',t:'12:00 – 15:30',title:'午餐：由布まぶし 心 站前店',leg:{mode:'walk',how:'步行',dur:'步行 3 分鐘',ml:'步行 3分'},cost:3000,note:'享用「由布まぶし 心」站前店豐後牛三吃，餐後漫步湯之坪街道。'},
+ {p:'kinrinko',t:'午後順遊',title:'金鱗湖',opt:true,leg:{mode:'walk',how:'步行',dur:'步行',ml:'步行'},note:'湯之坪街道盡頭的湖畔散步。'},
+ {p:'hananosho',t:'15:30 – 20:30',title:'由布院 花の庄（入住・晚餐）',leg:{mode:'walk',how:'步行',dur:'步行 15 分鐘',ml:'步行 15分'},note:'入住溫泉旅館，享受日式庭園與露天溫泉。18:30–20:30 於旅館享用和牛會席料理（一泊二食已內含）。'}
+ ],maps:[{title:'博多 ➔ 由布院（JR 久大本線）',s:[1,2,3]},{title:'由布院 步行動線',s:[3,4,5,6,7]}]},
+
+{n:3,date:'2/12',wd:'週三',title:'金鱗湖晨霧・返回博多・天神大名服飾選品購物',stops:[
+ {p:'hananosho',t:'08:00 – 10:30',title:'花の庄 晨湯・日式早餐',note:'晨湯、日式早餐。'},
+ {p:'kinrinko',t:'同上時段',title:'金鱗湖晨散',leg:{mode:'walk',how:'步行',dur:'步行',ml:'步行'},note:'晨霧金鱗湖漫步。'},
+ {p:'laruche',t:'10:30 – 12:00',title:'湖畔 Café La Ruche',leg:{mode:'walk',how:'步行',dur:'步行',ml:'步行'},cost:1800,note:'喝咖啡或逛小店。'},
+ {p:'yufuin_st',t:'12:39 發車',title:'JR 由布院站',leg:{mode:'walk',how:'步行（行程表未列，約 25 分為概估）',dur:'約 25 分',ml:'步行 約25分',tip:'過夜包寄放在花の庄，請預留回旅館取行李、退房的時間。'},note:'12:39 搭乘特急列車返回博多。'},
+ {p:'hakata',t:'12:39 – 14:48',title:'JR 博多站',leg:{mode:'train',how:'JR 特急列車',dur:'約 2 小時 9 分',ml:'JR 2h09',fare:4580,via:['hita','kurume','tosu'],warn:'行程表為 12:39 由布院發車。Ekitan 2026/3/14 改正版列的由布院發車為 12:01、15:56、17:17，請以 JR 九州官網確認班次與票價。'},note:'搭乘特急列車返回博多站。'},
+ {p:'prince',t:'15:00 – 15:30',title:'博多王子飯店 Check-in',leg:{mode:'walk',how:'步行',dur:'步行 5 分鐘',ml:'步行 5分'},note:'步行回博多王子飯店辦理 Check-in（啟動連住 3 晚）。'},
+ {p:'tenjin',t:'15:45 – 19:00',title:'天神・大名・PARCO 購物',leg:{mode:'subway',how:'地鐵空港線＋步行',dur:'地鐵 6 分鐘',ml:'地鐵 6分',fare:210},note:'服飾購物專屬時段：逛天神地下街、大名選品店、PARCO。'},
+ {p:'tenjin',t:'19:30 – 21:00',title:'晚餐：鮮美海鮮（天神或博多）',leg:{mode:'subway',how:'地鐵或步行',dur:'地鐵 6 分鐘（回博多用餐時）',ml:'地鐵 6分'},cost:4500,note:'晚餐於天神或博多享用海鮮。'}
+ ],maps:[{title:'由布院 步行動線',s:[1,2,3,4]},{title:'由布院 ➔ 博多（JR 久大本線）',s:[4,5]},{title:'博多・天神',s:[5,6,7,8]}]},
+
+{n:4,date:'2/13',wd:'週四',title:'海洋世界海之中道・海濱公園・在地屋台體驗',stops:[
+ {p:'prince',t:'09:00',title:'博多王子飯店出發'},
+ {p:'umi_st',t:'09:00 – 09:45',title:'海之中道站',leg:{mode:'train',how:'JR 鹿兒島本線 轉 香椎線（香椎站轉乘）',dur:'約 40 分鐘',ml:'JR 40分',fare:480,via:['kashii']},note:'從博多站搭乘電車前往水族館。'},
+ {p:'marine',t:'10:00 – 13:00',title:'海洋世界海之中道',leg:{mode:'walk',how:'步行',dur:'步行 5 分鐘',ml:'步行 5分'},cost:2500,note:'參觀海洋世界海之中道（看海豚表演）並享用午餐。'},
+ {p:'park',t:'13:30 – 16:00',title:'海之中道海濱公園',leg:{mode:'walk',how:'全程步行',dur:'步行 3 分鐘',ml:'步行 3分'},cost:450,note:'公園漫步、吹海風、欣賞海岸風景。'},
+ {p:'umi_st',t:'16:30',title:'海之中道站',leg:{mode:'walk',how:'步行',dur:'步行',ml:'步行'},note:'16:30 起搭車返回博多。'},
+ {p:'hakata',t:'16:30 – 17:15',title:'JR 博多站',leg:{mode:'train',how:'JR 香椎線 轉 鹿兒島本線',dur:'約 40 分鐘',ml:'JR 40分',fare:480,via:['kashii']},note:'搭車返回博多市區休息。'},
+ {p:'yatai',t:'18:00 – 20:30',title:'晚餐：中洲／天神屋台街',leg:{mode:'walk',how:'步行或地鐵',dur:'步行 10–15 分鐘',ml:'步行 10–15分'},cost:3000,note:'體驗在地博多屋台文化（關東煮、一口餃子、炒拉麵）。'}
+ ],maps:[{title:'博多 ➔ 海之中道 往返',s:[1,2,3,4,5,6,7]}]},
+
+{n:5,date:'2/14',wd:'週五',title:'門司港懷舊街區・燒咖哩・博多站最後採買',stops:[
+ {p:'prince',t:'10:00',title:'博多王子飯店出發',note:'睡到自然醒再出發。'},
+ {p:'mojiko_st',t:'10:00 – 11:00',title:'JR 門司港站',leg:{mode:'train',how:'JR 特急／新幹線 轉 普通車（小倉站轉乘）',dur:'約 50 分鐘',ml:'JR 50分',fare:1750,via:['kokura']},note:'搭乘 JR 前往門司港站。'},
+ {p:'curry',t:'11:30 – 13:30',title:'午餐：伽哩本舖門司港 RETORO 店',leg:{mode:'walk',how:'步行',dur:'步行 3 分鐘',ml:'步行 3分'},cost:1500,note:'享用招牌燒咖哩午餐，眺望關門海峽風光。'},
+ {p:'mojiko_st',t:'13:30 – 16:00',title:'門司港站（百年車站）',leg:{mode:'walk',how:'步行',dur:'步行',ml:'步行'},note:'漫步門司港懷舊街區，參觀百年門司港車站。'},
+ {p:'mitsui',t:'同上時段',title:'舊門司三井俱樂部',leg:{mode:'walk',how:'步行',dur:'步行',ml:'步行'}},
+ {p:'bluewing',t:'同上時段',title:'藍翼 Moji 吊橋',leg:{mode:'walk',how:'步行',dur:'步行',ml:'步行'}},
+ {p:'hakata',t:'17:00 – 19:00',title:'博多站 AMU PLAZA／阪急',leg:{mode:'train',how:'JR 特急／普通車（16:00 自門司港出發）',dur:'約 50 分鐘',ml:'JR 50分',fare:1750,via:['mojiko_st','kokura']},note:'博多站服飾補逛與伴手禮：AMU PLAZA／阪急補齊購物，放回隔壁飯店（步行 3 分）。'},
+ {p:'hakata',t:'19:00 – 21:00',title:'晚餐：極味や 和牛漢堡排或日式定食',leg:{mode:'walk',how:'步行',dur:'步行',ml:'步行'},cost:3000,note:'博多站周邊用餐。'}
+ ],maps:[{title:'博多 ⇄ 門司港（JR 鹿兒島本線）',s:[1,2,7]},{title:'門司港 步行動線',s:[2,3,4,5,6]}]},
+
+{n:6,date:'2/15',wd:'週六',title:'整理行李退房・福岡機場伴手禮採買・平安返台',stops:[
+ {p:'prince',t:'07:45',title:'博多王子飯店退房出發',note:'退房後步行至博多站，搭地鐵至國內線，轉接駁巴士至國際線。'},
+ {p:'fuk',t:'08:20 – 10:55',title:'福岡機場（返台班機）',leg:{mode:'subway',how:'地鐵空港線 轉 接駁巴士／專線公車',dur:'約 20–25 分鐘',ml:'地鐵＋巴士 20–25分',fare:260,via:['hakata']},cost:1000,note:'08:30 前抵達辦理登機與安檢，享用早餐、免稅店採買，10:55 起飛。'}
+ ],maps:[{title:'博多 ➔ 福岡機場',s:[1,2]}]}
+];
+
+/* ---------- 計算 ---------- */
+const yen=n=>'¥'+n.toLocaleString('en-US');
+DAYS.forEach(d=>{d.fare=d.stops.reduce((a,s)=>a+(s.leg&&s.leg.fare||0),0);d.other=d.stops.reduce((a,s)=>a+(s.cost||0),0);d.total=d.fare+d.other});
+const TOTAL=DAYS.reduce((a,d)=>a+d.total,0);
+const enc=encodeURIComponent;
+const gmDir=(o,d,m,w)=>`https://www.google.com/maps/dir/?api=1&origin=${enc(o)}&destination=${enc(d)}&travelmode=${m}`+(w&&w.length?`&waypoints=${enc(w.join('|'))}`:'');
+const gmPlace=q=>`https://www.google.com/maps/search/?api=1&query=${enc(q)}`;
+const q=id=>P[id][3];
+
+/* ---------- 地圖繪製 ---------- */
+const tw=(s,fs)=>{let w=0;for(const c of s)w+=c.charCodeAt(0)>255?fs:fs*0.58;return w};
+const hit=(r,list)=>list.filter(o=>!(r.x1<o.x0||r.x0>o.x1||r.y1<o.y0||r.y0>o.y1)).length;
+function specFromStops(day,idx){
+  const pins=[],seen=new Map();
+  idx.forEach(i=>{const s=day.stops[i-1];if(!seen.has(s.p)){const o={id:s.p,nums:[i]};seen.set(s.p,o);pins.push(o)}else seen.get(s.p).nums.push(i)});
+  pins.forEach(o=>{o.num=o.nums.join('·');o.label=P[o.id][4]});
+  const legs=[];
+  for(let k=1;k<idx.length;k++){const a=day.stops[idx[k-1]-1],b=day.stops[idx[k]-1],lg=b.leg;if(!lg||a.p===b.p)continue;legs.push({a:a.p,b:b.p,mode:lg.mode,ml:lg.ml,via:lg.via||[]})}
+  return{pins,legs};
+}
+function renderMap(el,spec){
+  const w=Math.max(300,Math.floor(el.clientWidth)||600),h=Math.round(Math.min(470,Math.max(320,w*0.7))),pad=64;
+  const ids=new Set();spec.pins.forEach(p=>ids.add(p.id));spec.legs.forEach(l=>{ids.add(l.a);ids.add(l.b);l.via.forEach(v=>ids.add(v))});
+  const arr=[...ids];
+  let minLa=1e9,maxLa=-1e9,minLo=1e9,maxLo=-1e9;
+  arr.forEach(id=>{const[,la,lo]=P[id];minLa=Math.min(minLa,la);maxLa=Math.max(maxLa,la);minLo=Math.min(minLo,lo);maxLo=Math.max(maxLo,lo)});
+  const k=Math.cos((minLa+maxLa)/2*Math.PI/180),dx=Math.max((maxLo-minLo)*k,0.008),dy=Math.max(maxLa-minLa,0.006);
+  const sc=Math.min((w-2*pad)/dx,(h-2*pad)/dy),cx=(minLo+maxLo)/2,cy=(minLa+maxLa)/2;
+  const pos={};arr.forEach(id=>{pos[id]={x:w/2+(P[id][2]-cx)*k*sc,y:h/2-(P[id][1]-cy)*sc}});
+  const pinIds=new Set(spec.pins.map(p=>p.id));
+  const items=spec.pins.map(p=>({id:p.id,num:p.num,label:p.label,via:false}));
+  arr.forEach(id=>{if(!pinIds.has(id)&&spec.legs.some(l=>l.via.includes(id)))items.push({id,num:null,label:P[id][4],via:true})});
+  items.forEach(it=>{
+    const n=it.num;
+    if(it.via){it.hw=4;it.hh=4}
+    else if(n===''){it.hw=9;it.hh=9}
+    else{it.hw=Math.max(15,(n.length*8+14)/2);it.hh=13}
+    it.x=pos[it.id].x;it.y=pos[it.id].y;
+  });
+  for(let r=0;r<80;r++){
+    for(let i=0;i<items.length;i++)for(let j=i+1;j<items.length;j++){
+      const a=items[i],b=items[j];let ddx=b.x-a.x,ddy=b.y-a.y,d=Math.hypot(ddx,ddy);
+      const need=Math.max(a.hw,a.hh)+Math.max(b.hw,b.hh)+8;
+      if(d<need){if(d<0.01){ddx=Math.cos(i*2.1+j);ddy=Math.sin(i*2.1+j);d=1}const m=(need-d)/2;a.x-=ddx/d*m;a.y-=ddy/d*m;b.x+=ddx/d*m;b.y+=ddy/d*m}
+    }
+    items.forEach(it=>{it.x=Math.min(w-it.hw-6,Math.max(it.hw+6,it.x));it.y=Math.min(h-it.hh-6,Math.max(it.hh+6,it.y))});
+  }
+  items.forEach(it=>{pos[it.id]={x:it.x,y:it.y}});
+  let svg=`<svg viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" role="img" aria-label="路線示意圖">`;
+  const f1=v=>v.toFixed(1);
+  // lines
+  spec.legs.forEach(l=>{
+    const path=[l.a,...l.via,l.b].map(id=>pos[id]);
+    const d='M'+path.map(p=>f1(p.x)+' '+f1(p.y)).join(' L');
+    svg+=`<path class="m-${l.mode}" d="${d}"/>`;
+    if(l.mode==='train')svg+=`<path class="m-train-tick" d="${d}"/>`;
+  });
+  const placed=items.map(it=>({x0:it.x-it.hw-3,y0:it.y-it.hh-3,x1:it.x+it.hw+3,y1:it.y+it.hh+3}));
+  const inb=r=>r.x0>=3&&r.y0>=3&&r.x1<=w-3&&r.y1<=h-3;
+  let labels='';
+  // pin labels
+  const order=[...items.filter(i=>!i.via),...items.filter(i=>i.via)];
+  order.forEach(it=>{
+    const fs=it.via?11:13,tW=tw(it.label,fs)+6,H=18,g=5,x=it.x,y=it.y;
+    const c=[[x+it.hw+g,y-H/2],[x-it.hw-g-tW,y-H/2],[x-tW/2,y-it.hh-g-H],[x-tW/2,y+it.hh+g],
+      [x+it.hw*0.5,y-it.hh-g-H],[x+it.hw*0.5,y+it.hh+g],[x-it.hw*0.5-tW,y-it.hh-g-H],[x-it.hw*0.5-tW,y+it.hh+g]]
+      .map(([a,b])=>({x0:a,y0:b,x1:a+tW,y1:b+H})).filter(inb);
+    let best=c.find(r=>hit(r,placed)===0)||c.sort((a,b)=>hit(a,placed)-hit(b,placed))[0]||{x0:x+it.hw+g,y0:y-H/2,x1:x+it.hw+g+tW,y1:y+H/2};
+    placed.push(best);
+    labels+=`<text class="lbl${it.via?' v':''}" x="${f1(best.x0+3)}" y="${f1(best.y0+13)}">${it.label}</text>`;
+  });
+  // leg labels
+  spec.legs.forEach(l=>{
+    if(!l.ml)return;
+    const pts=[l.a,...l.via,l.b].map(id=>pos[id]);let tot=0;const segs=[];
+    for(let i=1;i<pts.length;i++){const L=Math.hypot(pts[i].x-pts[i-1].x,pts[i].y-pts[i-1].y);segs.push(L);tot+=L}
+    if(tot<90)return;
+    let acc=0,si=0;for(;si<segs.length;si++){if(acc+segs[si]>=tot/2)break;acc+=segs[si]}
+    si=Math.min(si,segs.length-1);
+    const A=pts[si],B=pts[si+1],t=Math.min(1,Math.max(0,(tot/2-acc)/(segs[si]||1)));
+    const mx=A.x+(B.x-A.x)*t,my=A.y+(B.y-A.y)*t,nx=-(B.y-A.y)/(segs[si]||1),ny=(B.x-A.x)/(segs[si]||1);
+    const tW=tw(l.ml,12)+6,H=16;
+    const cand=[18,-18,30,-30,0].map(o=>{const cx=mx+nx*o,cy=my+ny*o;return{x0:cx-tW/2,y0:cy-H/2,x1:cx+tW/2,y1:cy+H/2}}).filter(inb);
+    const best=cand.find(r=>hit(r,placed)===0)||cand.sort((a,b)=>hit(a,placed)-hit(b,placed))[0];
+    if(!best||hit(best,placed)>0)return;
+    placed.push(best);
+    labels+=`<text class="lbl m m-${l.mode}" x="${f1((best.x0+best.x1)/2)}" y="${f1(best.y0+12)}" text-anchor="middle">${l.ml}</text>`;
+  });
+  // pins
+  items.forEach(it=>{
+    if(it.via)svg+=`<circle class="viadot" cx="${f1(it.x)}" cy="${f1(it.y)}" r="4"/>`;
+    else if(it.num==='')svg+=`<g class="pin"><circle cx="${f1(it.x)}" cy="${f1(it.y)}" r="9"/></g>`;
+    else svg+=`<g class="pin"><rect x="${f1(it.x-it.hw)}" y="${f1(it.y-13)}" width="${f1(it.hw*2)}" height="26" rx="13"/><text x="${f1(it.x)}" y="${f1(it.y+4.5)}">${it.num}</text></g>`;
+  });
+  el.innerHTML=svg+labels+'</svg>';
+}
+
+/* ---------- 頁面組裝 ---------- */
+document.getElementById('facts').innerHTML=
+ `<div><dt>日期</dt><dd class="num">2025/02/10（一）– 02/15（六）</dd></div>
+  <div><dt>天數</dt><dd>6 天 5 夜</dd></div>
+  <div><dt>重點住宿</dt><dd>博多王子飯店 ・ 由布院花の庄</dd></div>
+  <div><dt>預估費用（每人）</dt><dd class="num">${yen(TOTAL)}</dd></div>`;
+document.getElementById('nav').innerHTML=
+ `<li><a href="#overview">總覽</a></li>`+DAYS.map(d=>`<li><a href="#day${d.n}">Day ${d.n}</a></li>`).join('')+`<li><a href="#budget">費用</a></li><li><a href="#notes">提醒</a></li>`;
+document.getElementById('dayidx').innerHTML=DAYS.map(d=>
+ `<li><a href="#day${d.n}"><span class="k">Day ${d.n}</span><span class="t">${d.title}<br><span class="c">${d.date}（${d.wd}）</span></span><span class="c num">${yen(d.total)}</span></a></li>`).join('');
+
+function legHtml(prev,s){
+  const l=s.leg;if(!l)return'';
+  const same=prev&&prev.p===s.p;
+  const mode=l.mode==='walk'?'walking':'transit';
+  const link=same?'':`<a class="gm" target="_blank" rel="noopener" href="${gmDir(q(prev.p),q(s.p),mode)}">Google 地圖路線</a>`;
+  const meta=[l.dur,l.fare?yen(l.fare):''].filter(Boolean).join('　・　');
+  return `<div class="leg ${l.mode}"><span class="mode">${MODE[l.mode]}</span><div class="legtxt"><b>${l.how}</b><br><span class="meta num">${meta}</span></div>${link}${l.tip?`<p class="tip">${l.tip}</p>`:''}${l.warn?`<p class="warn">${l.warn}</p>`:''}</div>`;
+}
+function dayHtml(d){
+  const nums=new Map();
+  let tl=d.stops.map((s,i)=>{
+    const prev=d.stops[i-1];
+    const chips=(s.cost?`<span class="chip">${yen(s.cost)}</span>`:'');
+    return `<li class="stop"><div class="rail"><span class="badge">${i+1}</span></div><div class="body">${legHtml(prev,s)}
+      <div class="card${s.opt?' opt':''}"><div class="t">${s.t}</div><h3>${s.title}</h3>${s.note?`<p>${s.note}</p>`:''}
+      <div class="row">${chips}<a class="btn" target="_blank" rel="noopener" href="${gmPlace(q(s.p))}">在 Google 地圖查看</a></div></div></div></li>`;
+  }).join('');
+  const first=d.stops[0].p,last=d.stops[d.stops.length-1].p;
+  const wps=[];d.stops.slice(1,-1).forEach(s=>{const v=q(s.p);if(wps[wps.length-1]!==v&&v!==q(first)&&v!==q(last))wps.push(v)});
+  const dayLink=gmDir(q(first),q(last),'transit',wps.slice(0,9));
+  const maps=d.maps.map((m,i)=>`<div class="mapcard"><h3>${m.title}</h3><div class="mapbox" id="map-${d.n}-${i}"></div>
+    <div class="legend"><span><i class="l-train"></i>JR</span><span><i class="l-subway"></i>地鐵</span><span><i class="l-walk"></i>步行</span><span>圓角數字＝下方時間軸的順序</span></div>
+    <p class="cap">示意圖，地點位置為概略。</p></div>`).join('');
+  return `<section id="day${d.n}"><div class="sec-h"><span class="d">DAY ${d.n}</span><h2>${d.date}（${d.wd}）${d.title}</h2>
+    <span class="cost num">當日預估 <b>${yen(d.total)}</b>（交通 ${yen(d.fare)}）</span></div>
+    <div class="dayact"><a class="btn" target="_blank" rel="noopener" href="${dayLink}">整日路線（Google 地圖）</a></div>
+    <div class="maps">${maps}</div><ol class="tl">${tl}</ol></section>`;
+}
+document.getElementById('days').innerHTML=DAYS.map(dayHtml).join('');
+document.getElementById('budget-body').innerHTML=DAYS.map(d=>`<tr><td>Day ${d.n}　${d.date}（${d.wd}）</td><td>${yen(d.fare)}</td><td>${yen(d.other)}</td><td>${yen(d.total)}</td></tr>`).join('');
+document.getElementById('budget-foot').innerHTML=`<tr><td>合計</td><td>${yen(DAYS.reduce((a,d)=>a+d.fare,0))}</td><td>${yen(DAYS.reduce((a,d)=>a+d.other,0))}</td><td>${yen(TOTAL)}</td></tr>`;
+
+const OVERVIEW={pins:[
+  {id:'hakata',num:'',label:'福岡市區（博多）'},{id:'umi_st',num:'',label:'海之中道 Day 4'},
+  {id:'yufuin_st',num:'',label:'由布院 Day 2・3'},{id:'mojiko_st',num:'',label:'門司港 Day 5'}],
+ legs:[{a:'hakata',b:'yufuin_st',mode:'train',ml:'JR 由布院之森 2h14',via:['tosu','kurume','hita']},
+       {a:'hakata',b:'umi_st',mode:'train',ml:'JR 40分',via:['kashii']},
+       {a:'hakata',b:'mojiko_st',mode:'train',ml:'JR 50分',via:['kokura']}]};
+
+function drawAll(){
+  renderMap(document.getElementById('map-overview'),OVERVIEW);
+  DAYS.forEach(d=>d.maps.forEach((m,i)=>renderMap(document.getElementById(`map-${d.n}-${i}`),specFromStops(d,m.s))));
+}
+drawAll();
+let lastW=window.innerWidth,tm;
+window.addEventListener('resize',()=>{if(window.innerWidth===lastW)return;lastW=window.innerWidth;clearTimeout(tm);tm=setTimeout(drawAll,150)});
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(drawAll);
+</script>
+
+</body></html>
