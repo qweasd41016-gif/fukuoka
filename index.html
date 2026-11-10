@@ -201,6 +201,7 @@ const P={
  prince:['博多王子飯店',33.5883,130.4180,'Hakata Prince Hotel','王子飯店'],
  hakata:['JR 博多站',33.5897,130.4207,'博多駅','博多站'],
  ichiran:['一蘭拉麵 總本店',33.5925,130.4083,'一蘭 本社総本店','一蘭總本店'],
+ shinshin:['博多純情拉麵 Shin-Shin',33.5902,130.4198,'博多ラーメン Shin-Shin 博多駅','Shin-Shin'],
  kushida:['櫛田神社',33.5933,130.4107,'櫛田神社','櫛田神社'],
  nakasu:['中洲川端・川畔',33.5920,130.4066,'中洲川端駅','中洲川畔'],
  hanamidori:['華味鳥 水炊鍋',33.5906,130.4036,'華味鳥 水炊き 博多','華味鳥'],
@@ -231,9 +232,9 @@ const DAYS=[
 {n:1,date:'2/10',wd:'週一',title:'抵達福岡・博多運河城・中洲屋台美食',stops:[
  {p:'fuk',t:'10:00',title:'福岡機場降落入境',note:'10:00 降落入境，直接前往博多王子飯店寄放行李。'},
  {p:'prince',t:'10:00 – 11:30',title:'博多王子飯店（寄放行李）',leg:{mode:'subway',how:'地鐵空港線（福岡空港 ➔ 博多站）＋步行',dur:'地鐵 6 分＋步行 5 分',ml:'地鐵 6分',fare:260,tip:'國際線航廈需先搭免費接駁巴士（約 10 分）到國內線航廈再轉乘地鐵，全程約 20–25 分。'}},
- {p:'ichiran',t:'12:00 – 13:30',title:'午餐：一蘭拉麵 總本店',leg:{mode:'subway',how:'地鐵空港線至中洲川端，或散步前往',dur:'地鐵 2 分／步行 15 分',ml:'地鐵 2分'},cost:1000,note:'朝聖【一蘭拉麵 總本店】，享用經典豚骨拉麵。'},
- {p:'kushida',t:'14:00 – 16:30',title:'櫛田神社',leg:{mode:'walk',how:'步行',dur:'步行 5 分鐘',ml:'步行 5分'},cost:210,note:'參觀櫛田神社（行程中唯一神社踩點），隨後漫步中洲川端商店街與博多運河城。'},
- {p:'nakasu',t:'17:00 – 18:00',title:'中洲川端・川畔散步',leg:{mode:'walk',how:'步行',dur:'步行',ml:'步行'},cost:600,note:'輕甜點／咖啡時段：川畔散步，或享用簡單抹茶、咖啡小點。輕食不吃飽，留肚子給晚餐。'},
+ {p:'shinshin',t:'12:00 – 13:30',title:'午餐：博多純情拉麵 Shin-Shin',leg:{mode:'walk',how:'步行（博多站周邊）',dur:'5 分鐘',ml:'步行 5分'},cost:1000,note:'享用人氣排隊名店【博多純情拉麵 Shin-Shin】豚骨拉麵。'},
+ {p:'kushida',t:'14:00 – 16:30',title:'櫛田神社（行程中唯一神社）',leg:{from:'prince',mode:'subway',how:'飯店 ➔ 櫛田神社：地鐵七隈線 或 步行',dur:'3–12 分鐘',ml:'地鐵／步行 3–12分',fare:210},note:'參觀櫛田神社，漫步中洲川端商店街與博多運河城。'},
+ {p:'nakasu',t:'17:00 – 18:00',title:'中洲川端川畔散步／輕甜點',leg:{mode:'walk',how:'步行',dur:'步行',ml:'步行'},cost:600,note:'川畔散步或享用簡單咖啡、甜點小點（留肚子給晚餐水炊鍋）。'},
  {p:'hanamidori',t:'19:30 – 21:00',title:'晚餐：水炊鍋（華味鳥）',leg:{mode:'walk',how:'步行',dur:'步行 5–10 分鐘',ml:'步行 5–10分'},cost:4000,note:'重頭戲晚餐，享用暖心濃郁的博多名物「水炊鍋」。'}
  ],maps:[{title:'福岡市區動線',s:[1,2,3,4,5,6]}]},
 
@@ -242,10 +243,9 @@ const DAYS=[
  {p:'hakata',t:'08:30 – 09:15',title:'JR 博多站',leg:{mode:'walk',how:'步行',dur:'步行 5 分鐘',ml:'步行 5分'},note:'09:17 搭乘由布院之森 1 號。'},
  {p:'yufuin_st',t:'09:17 – 11:31',title:'JR 由布院站',leg:{mode:'train',how:'JR 觀光特急「由布院之森 1 號」',dur:'約 2 小時 14 分',ml:'JR 2h14',fare:4580,via:['tosu','kurume','hita'],warn:'行程表票價為 ¥4,580；Ekitan 查到博多～由布院約 ¥6,130，網路限定票 ¥5,600。請出發前再確認。'},note:'全車指定席（出發前 30 天預約），車上欣賞沿途山景與鄉村風光。'},
  {p:'hananosho',t:'11:35 – 12:00',title:'由布院 花の庄（寄放過夜包）',leg:{mode:'walk',how:'步行',dur:'步行約 5 分鐘',ml:'步行 5分'},note:'站旁 5 分鐘即達，先寄放過夜包。'},
- {p:'shin',t:'12:00 – 15:30',title:'午餐：由布まぶし 心 站前店',leg:{mode:'walk',how:'步行',dur:'步行 3 分鐘',ml:'步行 3分'},cost:3000,note:'享用「由布まぶし 心」站前店豐後牛三吃，餐後漫步湯之坪街道。'},
- {p:'kinrinko',t:'午後順遊',title:'金鱗湖',opt:true,leg:{mode:'walk',how:'步行',dur:'步行',ml:'步行'},note:'湯之坪街道盡頭的湖畔散步。'},
+ {p:'shin',t:'12:00 – 13:30',title:'午餐：由布まぶし 心（由布院站前店）',leg:{mode:'walk',how:'步行',dur:'3 分鐘',ml:'步行 3分'},cost:3000,note:'享用招牌豐後牛釜飯三吃。'},
  {p:'hananosho',t:'15:30 – 20:30',title:'由布院 花の庄（入住・晚餐）',leg:{mode:'walk',how:'步行',dur:'步行 15 分鐘',ml:'步行 15分'},note:'入住溫泉旅館，享受日式庭園與露天溫泉。18:30–20:30 於旅館享用和牛會席料理（一泊二食已內含）。'}
- ],maps:[{title:'博多 ➔ 由布院（JR 久大本線）',s:[1,2,3]},{title:'由布院 步行動線',s:[3,4,5,6,7]}]},
+ ],maps:[{title:'博多 ➔ 由布院（JR 久大本線）',s:[1,2,3]},{title:'由布院 步行動線',s:[3,4,5,6]}]},
 
 {n:3,date:'2/12',wd:'週三',title:'金鱗湖晨霧・返回博多・天神大名服飾選品購物',stops:[
  {p:'hananosho',t:'08:00 – 10:30',title:'花の庄 晨湯・日式早餐',note:'晨湯、日式早餐。'},
@@ -265,8 +265,9 @@ const DAYS=[
  {p:'park',t:'13:30 – 16:00',title:'海之中道海濱公園',leg:{mode:'walk',how:'全程步行',dur:'步行 3 分鐘',ml:'步行 3分'},cost:450,note:'公園漫步、吹海風、欣賞海岸風景。'},
  {p:'umi_st',t:'16:30',title:'海之中道站',leg:{mode:'walk',how:'步行',dur:'步行',ml:'步行'},note:'16:30 起搭車返回博多。'},
  {p:'hakata',t:'16:30 – 17:15',title:'JR 博多站',leg:{mode:'train',how:'JR 香椎線 轉 鹿兒島本線',dur:'約 40 分鐘',ml:'JR 40分',fare:480,via:['kashii']},note:'搭車返回博多市區休息。'},
- {p:'yatai',t:'18:00 – 20:30',title:'晚餐：中洲／天神屋台街',leg:{mode:'walk',how:'步行或地鐵',dur:'步行 10–15 分鐘',ml:'步行 10–15分'},cost:3000,note:'體驗在地博多屋台文化（關東煮、一口餃子、炒拉麵）。'}
- ],maps:[{title:'博多 ➔ 海之中道 往返',s:[1,2,3,4,5,6,7]}]},
+ {p:'yatai',t:'18:00 – 21:00',title:'晚餐：中洲屋台',leg:{mode:'walk',how:'步行或地鐵',dur:'步行 10–15 分鐘',ml:'步行 10–15分'},cost:3500,note:'體驗中洲屋台文化（關東煮、一口餃子）。'},
+ {p:'ichiran',t:'屋台之後',title:'宵夜：一蘭拉麵 總本店',leg:{mode:'walk',how:'步行',dur:'10 分鐘',ml:'步行 10分'},note:'朝聖【一蘭拉麵 總本店】宵夜拉麵。'}
+ ],maps:[{title:'博多 ➔ 海之中道 往返',s:[1,2,3,4,5,6,7,8]}]},
 
 {n:5,date:'2/14',wd:'週五',title:'門司港懷舊街區・燒咖哩・博多站最後採買',stops:[
  {p:'prince',t:'10:00',title:'博多王子飯店出發',note:'睡到自然醒再出發。'},
@@ -302,7 +303,7 @@ function specFromStops(day,idx){
   idx.forEach(i=>{const s=day.stops[i-1];if(!seen.has(s.p)){const o={id:s.p,nums:[i]};seen.set(s.p,o);pins.push(o)}else seen.get(s.p).nums.push(i)});
   pins.forEach(o=>{o.num=o.nums.join('·');o.label=P[o.id][4]});
   const legs=[];
-  for(let k=1;k<idx.length;k++){const a=day.stops[idx[k-1]-1],b=day.stops[idx[k]-1],lg=b.leg;if(!lg||a.p===b.p)continue;legs.push({a:a.p,b:b.p,mode:lg.mode,ml:lg.ml,via:lg.via||[]})}
+  for(let k=1;k<idx.length;k++){const a=day.stops[idx[k-1]-1],b=day.stops[idx[k]-1],lg=b.leg,o=lg&&(lg.from||a.p);if(!lg||o===b.p)continue;legs.push({a:o,b:b.p,mode:lg.mode,ml:lg.ml,via:lg.via||[]})}
   return{pins,legs};
 }
 function renderMap(el,spec){
@@ -395,9 +396,9 @@ document.getElementById('dayidx').innerHTML=DAYS.map(d=>
 
 function legHtml(prev,s){
   const l=s.leg;if(!l)return'';
-  const same=prev&&prev.p===s.p;
+  const o=l.from||(prev&&prev.p),same=!o||o===s.p;
   const mode=l.mode==='walk'?'walking':'transit';
-  const link=same?'':`<a class="gm" target="_blank" rel="noopener" href="${gmDir(q(prev.p),q(s.p),mode)}">Google 地圖路線</a>`;
+  const link=same?'':`<a class="gm" target="_blank" rel="noopener" href="${gmDir(q(o),q(s.p),mode)}">Google 地圖路線</a>`;
   const meta=[l.dur,l.fare?yen(l.fare):''].filter(Boolean).join('　・　');
   return `<div class="leg ${l.mode}"><span class="mode">${MODE[l.mode]}</span><div class="legtxt"><b>${l.how}</b><br><span class="meta num">${meta}</span></div>${link}${l.tip?`<p class="tip">${l.tip}</p>`:''}${l.warn?`<p class="warn">${l.warn}</p>`:''}</div>`;
 }
